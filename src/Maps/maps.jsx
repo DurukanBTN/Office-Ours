@@ -3,14 +3,48 @@ import "./Maps.css"
 
 const googleapikey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
-const ubcCoord = { lat: 49.2593, lng: -123.2475};
+const ubcCoord = { lat: 49.262, lng: -123.247};
+
+const ubcBounds = {
+    north: 49.275,  
+    south: 49.248,  
+    east: -123.226, 
+    west: -123.263   
+};
 
 const sessions = []
 
 const mapStyles = [
     {
+        "featureType": "all",
+        "stylers": [
+            {
+                "saturation": 0
+            },
+            {
+                "hue": "#e7ecf0"
+            }
+        ]
+    },
+    {
         "featureType": "administrative",
         "elementType": "all",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "road",
+        "stylers": [
+            {
+                "saturation": -70
+            }
+        ]
+    },
+    {
+        "featureType": "transit",
         "stylers": [
             {
                 "visibility": "off"
@@ -23,6 +57,15 @@ const mapStyles = [
         "stylers": [
             {
                 "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "poi",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "visibility": "on"
             }
         ]
     },
@@ -72,16 +115,17 @@ const mapStyles = [
         ]
     },
     {
-        "featureType": "transit",
-        "elementType": "all",
+        "featureType": "water",
         "stylers": [
             {
-                "visibility": "off"
+                "visibility": "simplified"
+            },
+            {
+                "saturation": -60
             }
         ]
     }
 ];
-
 function MapComponent() {
 
     return (
@@ -89,10 +133,16 @@ function MapComponent() {
             <APIProvider apiKey={googleapikey}>
                 <div id="map">
                     <Map
-                        defaultCenter={ubcCoord}
-                        defaultZoom={14}
-                        disableDefaultUI = "true"
+                        defaultCenter = {ubcCoord}
+                        defaultZoom = {15}
+                        disableDefaultUI = {true}
                         styles = {mapStyles}
+                        mapRestriction = {{
+                            latlngBounds: ubcBounds,
+                            strictBounds: true
+                        }}
+                        minZoom={13}
+                        maxZoom={18}
                     />
                 </div>
             </APIProvider>
