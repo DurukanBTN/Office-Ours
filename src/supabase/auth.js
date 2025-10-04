@@ -6,12 +6,24 @@ import client from "./client"
 
 // REQUIRES: password as a string, email as a string 
 // EFFECTS: adds user to supabase 
-function signUp(password, email) {
-    
+async function signUp(user_password, user_email) {
+    client.auth.signUp({
+        email: user_email,
+        password: user_password
+    })
+    .catch((err) => {
+        console.log("SignUp error thrown!", err);
+    });
 
 }
 
-function login() {
-
+async function signIn(user_password, user_email) {
+    client.auth.signInWithPassword({
+        email: user_email, 
+        password: user_password
+    })
+    .catch((err) => {
+        console.log("SignIn error thrown!", err);
+    });
 }
 
