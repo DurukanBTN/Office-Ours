@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import ubcLogo from './assets/ubc.png'
 import viteLogo from '/vite.svg'
+import MainPage from './MainPage'
 import './App.css'
 
 function App() {
@@ -10,6 +11,12 @@ function App() {
   const [newEmail, setNewEmail] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  // Show main page if logged in, otherwise show login form
+  if (isLoggedIn) {
+    return <MainPage onLogout={() => setIsLoggedIn(false)} />
+  }
 
   return (
     <>
@@ -42,6 +49,11 @@ function App() {
               // TODO: Add error handling
               // TODO: Add loading state during login
               // TODO: Redirect to main page on successful login
+              
+              // TODO: Remove this redirect when proper authentication is implemented
+              // This should only redirect if credentials are valid
+              setIsLoggedIn(true)
+              
               console.log('Login attempt:', { email, password })
             }}
           >
@@ -111,6 +123,10 @@ function App() {
                     setNewEmail('')
                     setNewPassword('')
                     setConfirmPassword('')
+
+                    // TODO: Remove this redirect when proper authentication is implemented
+                    // This should only redirect if credentials are valid
+                    setIsLoggedIn(true)
                   }}
                 >
                   Create Account
