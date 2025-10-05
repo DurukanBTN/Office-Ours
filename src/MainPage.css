@@ -162,26 +162,29 @@
   font-size: 1.2rem;
 }
 
-.classes-list {
+.filter-content .classes-list {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
   margin-bottom: 1.5rem;
+  max-height: 200px;
+  overflow-y: auto;
 }
 
-.class-option {
+.filter-content .class-option {
   display: flex;
   align-items: center;
   gap: 0.8rem;
+  flex-shrink: 0;
 }
 
-.class-option input[type="checkbox"] {
+.filter-content .class-option input[type="checkbox"] {
   width: 18px;
   height: 18px;
   cursor: pointer;
 }
 
-.class-option label {
+.filter-content .class-option label {
   cursor: pointer;
   font-size: 1rem;
   color: #333;

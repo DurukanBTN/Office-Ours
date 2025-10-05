@@ -50,8 +50,7 @@ function App() {
               // TODO: Add loading state during login
               // TODO: Redirect to main page on successful login
               
-              // TODO: Remove this redirect when proper authentication is implemented
-              // This should only redirect if credentials are valid
+              // TODO: when proper authentication is implemented this should only redirect if credentials are valid 
               setIsLoggedIn(true)
               
               console.log('Login attempt:', { email, password })
