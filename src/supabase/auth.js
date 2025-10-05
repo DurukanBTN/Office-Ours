@@ -31,3 +31,5 @@ async function signIn(user_password, user_email) {
     return data.user.id;
 }
 
+export { signIn, signUp };
+

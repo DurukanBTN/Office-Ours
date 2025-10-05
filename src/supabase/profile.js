@@ -24,7 +24,8 @@ async function createProfile(year, major, classes, firstName, lastName) {
                 first_name: firstName, 
                 last_name: lastName
             }
-        ]);
+        ])
+        .select("*");
 
     if (error) throw error;
     return data[0];
@@ -61,7 +62,8 @@ async function updateProfile(year, major, classes, firstName, lastName) {
     const { data: updatedProfile, error: updateError} = await client
     .from("profiles")
     .update(updates)
-    .eq("id", user.id);
+    .eq("id", user.id)
+    .select("*");
 
     if (updateError) throw (updateError);
     return updatedProfile[0];
@@ -70,6 +72,17 @@ async function updateProfile(year, major, classes, firstName, lastName) {
 // EFFECTS: deletes user's profile 
 // RETURNS: deleted profile
 async function deleteProfile() {
-    
+    const { data: { user }} = await client.auth.getUser();
+    if (!user) throw new Error ("User not found!");
 
+    const { data, error } = await client
+        .from("profiles")
+        .delete()
+        .eq("id", user.id)
+        .select("*");
+
+    if (error) throw error;
+    return data[0];
 }
+
+export { createProfile, updateProfile, deleteProfile };
