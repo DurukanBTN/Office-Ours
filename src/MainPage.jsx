@@ -3,6 +3,7 @@ import './MainPage.css'
 import ProfilePage from './ProfilePage'
 import { mockStudySessions } from './mockData'
 import MapComponent from './Maps/Maps'
+import * as session from "./supabase/session"
 
 function MainPage({ onLogout }) {
   const [showProfile, setShowProfile] = useState(false)
@@ -82,8 +83,9 @@ function MainPage({ onLogout }) {
             </button>
             <button 
               className="filter-button"
-              onClick={() => setShowFilterModal(true)}
-            >
+              onClick={() => 
+               setShowFilterModal(true)}
+              >
               Filter Classes
             </button>
           </div>

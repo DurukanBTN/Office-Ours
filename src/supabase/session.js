@@ -45,4 +45,40 @@ async function deleteSession(sid) {
     return data[0];
 }
 
-export { createSession, deleteSession };
+// RETURNS: all sessions in the db
+async function allSessions() {
+    const { data, error } = await client
+        .from("sessions")
+        .select("*");
+
+    if (error) throw error;
+    return data;
+}
+
+// REQUIRES: className: string
+// RETURNS: all sessions that have className
+async function filterSessions(className) {
+    const { data, error } = await client   
+        .from("sessions")
+        .select("*")
+        .eq("class", className)
+    
+    if (error) throw error;
+    return data;
+}
+
+// RETURNS: all sessions current user created
+async function getUserSessions() {
+    const { data: { user }} = await client.auth.getUser();
+    if (!user) throw new Error("User not found!");
+
+    const { data: sessionsData, error } = await client 
+        .from("sessions")
+        .select("*")
+        .eq("pid", user.id)
+
+    if (error) throw error;
+    return sessionsData;
+}
+
+export { createSession, deleteSession, allSessions, filterSessions, getUserSessions };
