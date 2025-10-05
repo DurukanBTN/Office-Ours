@@ -2,36 +2,74 @@
 
 import client from "./client"
 
-// REQUIRES: uid: supabase client user id 
-//           year: int
+// REQUIRES: year: int
 //           major: string
 //           classes: string[]
 //           firstName: string
 //           lastName: string
 // EFFECTS: creates a user profile for viewer if they are logged in 
-async function createProfile(userID, year, major, classes, firstName, lastName) {
-    client
+// RETURNS: profile that was created 
+async function createProfile(year, major, classes, firstName, lastName) {
+    const { data: { user }} = await client.auth.getUser();
+    if (!user) throw new Error ("User not found!");
+
+    const { data, error } = await client
+        .from("profiles")
+        .insert([
+            {
+                id: user.id, 
+                year: year, 
+                major: major, 
+                classes: classes, 
+                first_name: firstName, 
+                last_name: lastName
+            }
+        ]);
+
+    if (error) throw error;
+    return data[0];
+}
+
+// REQUIRES: attributes of row we want to update (ALLOWED to be null)
+//           classes should be a list of ONLY NEW classes
+// EFFECTS: updates the user's profile with new attributes
+// RETURNS: newly updated profile
+async function updateProfile(year, major, classes, firstName, lastName) {
+    const { data: { user } } = await client.auth.getUser();
+    if (!user) throw new Error("No user found!");
+
+    const {data, error} = await client.from("profiles").eq("id", user.id).select("*");
+    if (error) throw new Error("Error when fetching classes for profile!");
+    const oldClasses = data[0].classes || [];   //empty array if null
+
+    const updates = {};
+    if (year != null) updates.year = year;
+    if (major != null) updates.major = major;
+    if (firstName != null) updates.firstName = firstName;
+    if (lastName != null) updates.lastName = lastName;
+
+    if (classes == null) {
+        updates.classes = oldClasses;
+    } else {
+        const mergedClasses = [...oldClasses];
+        classes.forEach((newClass) => {
+            if (!mergedClasses.includes(newClass)) mergedClasses.push(newClass);
+        });
+        updates.classes = mergedClasses;
+    }
+
+    const { data: updatedProfile, error: updateError} = await client
     .from("profiles")
-    .insert([
-        {
-            id: userID, 
-            year: year, 
-            major: major, 
-            classes: classes, 
-            first_name: firstName, 
-            last_name: lastName
-        }
-    ]) 
-    .catch((err) => {
-        console.log("Error when creating profile!", err);
-    })
+    .update(updates)
+    .eq("id", user.id);
 
+    if (updateError) throw (updateError);
+    return updatedProfile[0];
 }
 
-async function updateProfile() {
-
-}
-
+// EFFECTS: deletes user's profile 
+// RETURNS: deleted profile
 async function deleteProfile() {
+    
 
 }
