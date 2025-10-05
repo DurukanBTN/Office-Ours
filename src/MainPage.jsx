@@ -1,36 +1,39 @@
 import React, { useState, useEffect } from 'react'
 import './MainPage.css'
 import ProfilePage from './ProfilePage'
+import AddPage from './AddPage'
 import { mockStudySessions } from './mockData'
 import MapComponent from './Maps/Maps'
 import { allSessions } from './supabase/session'
 
 function MainPage({ onLogout }) {
   const [showProfile, setShowProfile] = useState(false)
+  const [showAddPage, setShowAddPage] = useState(false)
   const [showFilterModal, setShowFilterModal] = useState(false)
   const [selectedClasses, setSelectedClasses] = useState([])
   const [studySessions, setStudySessions] = useState([])
   const [filteredSessions, setFilteredSessions] = useState([])
   const [loading, setLoading] = useState(true)
 
+  // Function to fetch sessions from Supabase
+  const fetchSessions = async () => {
+    try {
+      setLoading(true)
+      const sessions = await allSessions()
+      setStudySessions(sessions)
+      setFilteredSessions(sessions)
+    } catch (error) {
+      console.error('Error fetching sessions:', error)
+      // Fallback to mock data if Supabase fails
+      setStudySessions(mockStudySessions)
+      setFilteredSessions(mockStudySessions)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   // Fetch sessions from Supabase on component mount
   useEffect(() => {
-    const fetchSessions = async () => {
-      try {
-        setLoading(true)
-        const sessions = await allSessions()
-        setStudySessions(sessions)
-        setFilteredSessions(sessions)
-      } catch (error) {
-        console.error('Error fetching sessions:', error)
-        // Fallback to mock data if Supabase fails
-        setStudySessions(mockStudySessions)
-        setFilteredSessions(mockStudySessions)
-      } finally {
-        setLoading(false)
-      }
-    }
-    
     fetchSessions()
   }, [])
 
@@ -65,9 +68,17 @@ function MainPage({ onLogout }) {
     }
   }
 
-  // Show profile page if profile is open, otherwise show main page
+  // Show profile page if profile is open
   if (showProfile) {
     return <ProfilePage onBack={() => setShowProfile(false)} />
+  }
+
+  // Show add page if add page is open
+  if (showAddPage) {
+    return <AddPage onBack={() => {
+      setShowAddPage(false)
+      fetchSessions() // Refresh sessions when returning from AddPage
+    }} />
   }
 
   return (
@@ -77,6 +88,12 @@ function MainPage({ onLogout }) {
         onClick={onLogout}
       >
         ← Back to Login
+      </button>
+      <button 
+        className="add-button"
+        onClick={() => setShowAddPage(true)}
+      >
+        + Add Session
       </button>
       <button 
         className="profile-button"
