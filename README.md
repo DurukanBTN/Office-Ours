@@ -2,7 +2,7 @@
 
 Durukan Butun,
 Iden Huang,
-Pouya Khoshnavazi,
+Pouya Khoshnavazi
 
 # 🏫 Office Ours
 
