@@ -3,8 +3,8 @@ import ubcLogo from './assets/ubc.png'
 // import viteLogo from '/vite.svg'
 import MainPage from './MainPage'
 import './App.css'
-import MapComponent from './Maps/Maps'
-
+import client from "./supabase/client"
+import MapComponent from "./Maps/Maps"
 
 function App() {
   const [email, setEmail] = useState('')
