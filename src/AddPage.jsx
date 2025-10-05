@@ -31,7 +31,9 @@ function AddPage({ onBack }) {
         startTimeISO,
         endTimeISO,
         studyClass,
-        description
+        description,
+        selectedLocation.lat,
+        selectedLocation.lng
       )
       
       console.log('Session created successfully:', newSession)
@@ -71,6 +73,7 @@ function AddPage({ onBack }) {
           onLocationSelect={setSelectedLocation}
           selectedLocation={selectedLocation}
           allowLocationSelection={true}
+          sessions={[]}
         />
       </div>
       

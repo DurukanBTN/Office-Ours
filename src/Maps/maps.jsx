@@ -13,7 +13,8 @@ const ubcBounds = {
     west: -123.263   
 };
 
-const sessions = [
+// Mock sessions for fallback
+const mockSessions = [
     {
         id: 1,
         position: {lat: 49.2613, lng:-123.2489},
@@ -134,7 +135,7 @@ const mapStyles = [
         ]
     }
 ];
-function MapComponent({ onLocationSelect, selectedLocation, allowLocationSelection = false }) {
+function MapComponent({ onLocationSelect, selectedLocation, allowLocationSelection = false, sessions = mockSessions, highlightedSession = null, onSessionClick = null }) {
 
     const [selectedSession, setSelectedSession] = useState(null);
 
@@ -160,15 +161,31 @@ function MapComponent({ onLocationSelect, selectedLocation, allowLocationSelecti
                             onLocationSelect({ lat, lng });
                         } : undefined}
                     >
-                        {sessions.map(marker => (
-                            <Marker
-                                key={marker.id}
-                                position={marker.position}
-                                title={marker.title}
-                                onClick={() => setSelectedSession(marker)}
-                                // icon={"src\assets\react.svg"}
-                            />
-                        ))}
+                        {sessions.map(session => {
+                            const isHighlighted = highlightedSession && highlightedSession.id === session.id;
+                            return (
+                                <Marker
+                                    key={session.id}
+                                    position={{lat: session.lat, lng: session.lng}}
+                                    title={session.class}
+                                    onClick={() => {
+                                        if (onSessionClick) {
+                                            onSessionClick(session);
+                                        }
+                                    }}
+                                    // Add visual highlighting for selected session
+                                    icon={isHighlighted ? {
+                                        url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+                                            <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                                                <circle cx="16" cy="16" r="12" fill="#ff4444" stroke="#ffffff" stroke-width="3"/>
+                                                <circle cx="16" cy="16" r="6" fill="#ffffff"/>
+                                            </svg>
+                                        `),
+                                        scaledSize: { width: 32, height: 32 }
+                                    } : undefined}
+                                />
+                            );
+                        })}
 
                         {/* Selected location marker for AddPage */}
                         {allowLocationSelection && selectedLocation && (
@@ -178,25 +195,6 @@ function MapComponent({ onLocationSelect, selectedLocation, allowLocationSelecti
                             />
                         )}
 
-                        {selectedSession?.position && (
-                            <InfoWindow
-                                position={selectedSession.position}
-                                onCloseClick={() => setSelectedSession(null)}
-                            >
-                                <div style={{ padding: '10px' }}>
-                                    <h3 style={{ color: '#000' }}>{selectedSession.title}</h3>
-                                    <p style={{ color: '#000' }}>{selectedSession.comment}</p>
-                                    <p style={{ 
-                                        fontSize: '12px', 
-                                        color: '#000', 
-                                        marginTop: '8px',
-                                        fontFamily: 'monospace'
-                                    }}>
-                                        Coordinates: {selectedSession.position.lat.toFixed(6)}, {selectedSession.position.lng.toFixed(6)}
-                                    </p>
-                                </div>
-                            </InfoWindow>
-                          )}
                     </Map>
                 </div>
             </APIProvider>

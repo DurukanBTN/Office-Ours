@@ -6,10 +6,12 @@ import client from "./client"
 //           start_time: timestamp
 //           end_time: timestamp
 //           study_class: string
-//           description: string 
+//           description: string
+//           lat: number (latitude)
+//           lng: number (longitude)
 // EFFECTS: create a session associated with only one profile (represents study session)
 // RETURNS: newly created session 
-async function createSession(location, start_time, end_time, study_class, description) {
+async function createSession(location, start_time, end_time, study_class, description, lat, lng) {
     const { data: { user } } = await client.auth.getUser();
     if (!user) throw new Error ("User not found!");
 
@@ -46,7 +48,9 @@ async function createSession(location, start_time, end_time, study_class, descri
             start_time: start_time, 
             end_time: end_time, 
             class: study_class, 
-            description: description
+            description: description,
+            lat: lat,
+            lng: lng
         }])
         .select("*");
 

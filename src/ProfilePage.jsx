@@ -443,32 +443,41 @@ function ProfilePage({ onBack }) {
                       console.log('Study session clicked:', session)
                     }}
                   >
-                    <div className="session-header">
-                      <span className="session-class">{session.class}</span>
-                    </div>
-                    <div className="session-details">
-                      <div className="session-info">
-                        <span className="detail-label">Created by:</span>
-                        <span className="detail-value">You</span>
+                    <div className="session-content">
+                      <div className="session-normal-view">
+                        <div className="session-header">
+                          <span className="session-class">{session.class}</span>
+                        </div>
+                        <div className="session-details">
+                          <div className="session-info">
+                            <span className="detail-label">Created by:</span>
+                            <span className="detail-value">You</span>
+                          </div>
+                          <div className="session-info">
+                            <span className="detail-label">Date:</span>
+                            <span className="detail-value">{new Date(session.start_time).toLocaleDateString()}</span>
+                          </div>
+                          <div className="session-info">
+                            <span className="detail-label">Time:</span>
+                            <span className="detail-value">
+                              {new Date(session.start_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} - 
+                              {new Date(session.end_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                            </span>
+                          </div>
+                          <div className="session-info">
+                            <span className="detail-label">Location:</span>
+                            <span className="detail-value">{session.location}</span>
+                          </div>
+                        </div>
                       </div>
-                      <div className="session-info">
-                        <span className="detail-label">Date:</span>
-                        <span className="detail-value">{new Date(session.start_time).toLocaleDateString()}</span>
-                      </div>
-                      <div className="session-info">
-                        <span className="detail-label">Time:</span>
-                        <span className="detail-value">
-                          {new Date(session.start_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} - 
-                          {new Date(session.end_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-                        </span>
-                      </div>
-                      <div className="session-info">
-                        <span className="detail-label">Location:</span>
-                        <span className="detail-value">{session.location}</span>
-                      </div>
-                      <div className="session-info">
-                        <span className="detail-label">Description:</span>
-                        <span className="detail-value">{session.description}</span>
+                      <div className="session-hover-view">
+                        <div className="session-header">
+                          <span className="session-class">{session.class}</span>
+                        </div>
+                        <div className="session-description">
+                          <span className="description-label">Description:</span>
+                          <span className="description-text">{session.description}</span>
+                        </div>
                       </div>
                     </div>
                   </button>
