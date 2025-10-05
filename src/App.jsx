@@ -5,7 +5,6 @@ import './App.css'
 import client from "./supabase/client"
 
 function App() {
-    console.log(client);
   const [count, setCount] = useState(0)
 
   return (
