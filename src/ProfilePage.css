@@ -436,3 +436,29 @@
   color: white;
   font-size: 0.9rem;
 }
+
+.loading-message, .no-sessions-message {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: #ccc;
+  font-size: 1.1rem;
+  text-align: center;
+  padding: 2rem;
+}
+
+.loading-message p, .no-sessions-message p {
+  margin: 0.5rem 0;
+}
+
+.no-sessions-message p:first-child {
+  font-weight: 500;
+  color: #888;
+}
+
+.no-sessions-message p:last-child {
+  font-size: 0.9rem;
+  color: #666;
+}

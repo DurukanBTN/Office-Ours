@@ -39,6 +39,8 @@ async function updateProfile(year, major, classes, firstName, lastName) {
     const { data: { user } } = await client.auth.getUser();
     if (!user) throw new Error("No user found!");
 
+    const {data, error} = await client.from("profiles").select("*").eq("id", user.id);
+    if (error) throw new Error("Error when fetching classes for profile!");
     const oldClasses = data[0]?.classes || [];   //empty array if null
 
     const updates = {};

@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import './ProfilePage.css'
 import { mockStudySessions } from './mockData'
+import { updateProfile } from './supabase/profile'
+import { getUserSessions } from './supabase/session'
+import client from './supabase/client'
 
 function ProfilePage({ onBack }) {
-  // TODO: Replace with data from Supabase
-  const mockProfile = {
-    pid: 1, // pid?
-    year: null,
-    major: null,
-    classes: [], // Start with empty classes array
-    first_name: null,
-    last_name: null,
-  }
 
   // State management
   const [profile, setProfile] = useState({
@@ -28,6 +22,8 @@ function ProfilePage({ onBack }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [profileLoading, setProfileLoading] = useState(true)
+  const [userSessions, setUserSessions] = useState([])
+  const [sessionsLoading, setSessionsLoading] = useState(true)
   
   // Personal information editing state
   const [editForm, setEditForm] = useState({
@@ -37,46 +33,126 @@ function ProfilePage({ onBack }) {
     year: ''
   })
 
-  // Load profile on component mount - using mock data for now
+  // Fetch user's profile data
+  const fetchUserProfile = async () => {
+    try {
+      setProfileLoading(true)
+      const { data: { user } } = await client.auth.getUser()
+      if (!user) throw new Error("User not found!")
+
+      const { data: profileData, error } = await client
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
+        .single()
+
+      if (error) throw error
+
+      // Update profile state with real data
+      setProfile({
+        id: profileData.id,
+        year: profileData.year,
+        major: profileData.major,
+        classes: profileData.classes || [],
+        first_name: profileData.first_name,
+        last_name: profileData.last_name
+      })
+
+    } catch (error) {
+      console.error('Error fetching user profile:', error)
+      // Keep default empty profile if error
+    } finally {
+      setProfileLoading(false)
+    }
+  }
+
+  // Fetch user's sessions
+  const fetchUserSessions = async () => {
+    try {
+      setSessionsLoading(true)
+      const sessions = await getUserSessions()
+      setUserSessions(sessions)
+    } catch (error) {
+      console.error('Error fetching user sessions:', error)
+      setUserSessions([])
+    } finally {
+      setSessionsLoading(false)
+    }
+  }
+
+  // Load profile and sessions on component mount
   useEffect(() => {
-    setProfileLoading(false)
+    fetchUserProfile()
+    fetchUserSessions()
   }, [])
 
-  // Handle adding a new class (UI only - no database interaction)
-  const handleAddClass = () => {
+  // Handle adding a new class
+  const handleAddClass = async () => {
     if (!newClass.trim()) return
     
     setLoading(true)
     setError(null)
     
-    // Simulate loading
-    setTimeout(() => {
-      // Update local state only
+    try {
+      // Get current classes and add new one
+      const updatedClasses = [...profile.classes, newClass.trim()]
+      
+      // Call updateProfile with the new classes array
+      await updateProfile(
+        null, // year - don't change
+        null, // major - don't change
+        [newClass.trim()], // classes - only the new class to add
+        null, // firstName - don't change
+        null  // lastName - don't change
+      )
+      
+      // Update local state
       setProfile(prev => ({
         ...prev,
-        classes: [...prev.classes, newClass.trim()]
+        classes: updatedClasses
       }))
       
       setNewClass('')
       setLoading(false)
-    }, 500)
+      console.log('Class added successfully')
+    } catch (error) {
+      console.error('Error adding class:', error)
+      setError('Failed to add class. Please try again.')
+      setLoading(false)
+    }
   }
 
-  // Handle removing a class (UI only - no database interaction)
-  const handleRemoveClass = (classToRemove) => {
+  // Handle removing a class
+  const handleRemoveClass = async (classToRemove) => {
     setLoading(true)
     setError(null)
     
-    // Simulate loading
-    setTimeout(() => {
-      // Update local state only
+    try {
+      // Get updated classes array
+      const updatedClasses = profile.classes.filter(cls => cls !== classToRemove)
+      
+      // Call updateProfile with the updated classes array
+      await updateProfile(
+        null, // year - don't change
+        null, // major - don't change
+        updatedClasses, // classes - the updated array
+        null, // firstName - don't change
+        null  // lastName - don't change
+      )
+      
+      // Update local state
       setProfile(prev => ({
         ...prev,
-        classes: prev.classes.filter(cls => cls !== classToRemove)
+        classes: updatedClasses
       }))
       
       setLoading(false)
-    }, 300)
+      console.log('Class removed successfully')
+    } catch (error) {
+      console.error('Error removing class:', error)
+      setError('Failed to remove class. Please try again.')
+      setLoading(false)
+    }
   }
 
   // Handle starting personal information edit
@@ -85,19 +161,27 @@ function ProfilePage({ onBack }) {
       firstName: profile.first_name || '',
       lastName: profile.last_name || '',
       major: profile.major || '',
-      year: profile.year || ''
+      year: profile.year ? profile.year.toString() : ''
     })
     setIsEditingPersonal(true)
   }
 
-  // Handle saving personal information (UI only - no database interaction)
-  const handleSavePersonal = () => {
+  // Handle saving personal information
+  const handleSavePersonal = async () => {
     setLoading(true)
     setError(null)
     
-    // Simulate loading
-    setTimeout(() => {
-      // Update local state only
+    try {
+      // Call updateProfile with the form data
+      await updateProfile(
+        editForm.year ? parseInt(editForm.year) : null,
+        editForm.major || null,
+        null, // classes - we'll handle this separately
+        editForm.firstName || null,
+        editForm.lastName || null
+      )
+      
+      // Update local state
       setProfile(prev => ({
         ...prev,
         first_name: editForm.firstName,
@@ -108,7 +192,12 @@ function ProfilePage({ onBack }) {
       
       setIsEditingPersonal(false)
       setLoading(false)
-    }, 800)
+      console.log('Profile updated successfully')
+    } catch (error) {
+      console.error('Error updating profile:', error)
+      setError('Failed to update profile. Please try again.')
+      setLoading(false)
+    }
   }
 
   // Handle canceling personal information edit
@@ -129,8 +218,8 @@ function ProfilePage({ onBack }) {
                            profile.year && 
                            profile.classes.length > 0
 
-  // Filter study sessions to only show current user's sessions
-  const currentUserSessions = mockStudySessions.filter(session => session.pid === profile.id)
+  // Use real user sessions from Supabase
+  const currentUserSessions = userSessions
 
 
   // Show loading state while fetching profile
@@ -335,7 +424,17 @@ function ProfilePage({ onBack }) {
             <div className="info-section">
               <h2>Study Sessions</h2>
               <div className="study-sessions">
-                {currentUserSessions.map((session) => (
+                {sessionsLoading ? (
+                  <div className="loading-message">
+                    <p>Loading your study sessions...</p>
+                  </div>
+                ) : currentUserSessions.length === 0 ? (
+                  <div className="no-sessions-message">
+                    <p>You haven't created any study sessions yet.</p>
+                    <p>Go to the main page and click "+ Add Session" to create your first session!</p>
+                  </div>
+                ) : (
+                  currentUserSessions.map((session) => (
                   <button 
                     key={session.id} 
                     className="study-session-box"
@@ -348,6 +447,10 @@ function ProfilePage({ onBack }) {
                       <span className="session-class">{session.class}</span>
                     </div>
                     <div className="session-details">
+                      <div className="session-info">
+                        <span className="detail-label">Created by:</span>
+                        <span className="detail-value">You</span>
+                      </div>
                       <div className="session-info">
                         <span className="detail-label">Date:</span>
                         <span className="detail-value">{new Date(session.start_time).toLocaleDateString()}</span>
@@ -369,7 +472,8 @@ function ProfilePage({ onBack }) {
                       </div>
                     </div>
                   </button>
-                ))}
+                  ))
+                )}
               </div>
             </div>
           ) : (

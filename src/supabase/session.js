@@ -70,11 +70,17 @@ async function deleteSession(sid) {
     return data[0];
 }
 
-// RETURNS: all sessions in the db
+// RETURNS: all sessions in the db with creator names
 async function allSessions() {
     const { data, error } = await client
         .from("sessions")
-        .select("*");
+        .select(`
+            *,
+            profiles!sessions_pid_fkey (
+                first_name,
+                last_name
+            )
+        `);
 
     if (error) throw error;
     return data;

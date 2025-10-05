@@ -155,6 +155,15 @@ function MainPage({ onLogout }) {
               </div>
               <div className="session-details">
                 <div className="session-info">
+                  <span className="detail-label">Created by:</span>
+                  <span className="detail-value">
+                    {session.profiles ? 
+                      `${session.profiles.first_name || 'Unknown'} ${session.profiles.last_name || 'User'}` : 
+                      'Unknown User'
+                    }
+                  </span>
+                </div>
+                <div className="session-info">
                   <span className="detail-label">Date:</span>
                   <span className="detail-value">{new Date(session.start_time).toLocaleDateString()}</span>
                 </div>
