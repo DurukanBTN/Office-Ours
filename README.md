@@ -69,5 +69,3 @@ Follow these steps to set up the project locally:
 4. **Run Development Servor**
 
    ```npm run dev
-
-   ```
