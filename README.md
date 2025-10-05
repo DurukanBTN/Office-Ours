@@ -1,16 +1,73 @@
-# React + Vite
+# StormHacks 2025 Submission
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Durukan Butun
+Iden Huang
+Pouya Khoshnavazi
 
-Currently, two official plugins are available:
+# 🏫 Office Ours
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+_A peer-driven platform that helps students create and join study sessions when traditional office hours aren’t available._
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 💡 Overview
 
-## Expanding the ESLint configuration
+Have you ever found yourself sweating over an assignment as the deadline inches closer, only to realize that none of the available office hours fit your schedule? We’ve all been there — and that’s why we built **Office Ours**!
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+**Office Ours** is a web application designed to help students connect with peers facing similar academic challenges.  
+When office hours don’t fit into busy schedules, our platform lets students **create or join study sessions** specific to their course or topic.  
+With an integrated campus map and real-time updates, finding collaboration opportunities has never been easier.
+
+---
+
+## ✨ Features
+
+- 🧑‍🏫 Create and join study sessions by class and topic
+- 🗺️ View study sessions on an interactive campus map (via Google Maps API)
+- 🔐 Secure user authentication and data storage with Supabase
+- 💬 Connect with classmates outside of traditional office hours
+- 🔄 Real-time updates for study sessions
+
+---
+
+## 🧰 Tech Stack
+
+- **Frontend:** React
+- **Backend / Database:** Supabase (authentication + data storage)
+- **API Integration:** Google Maps API
+- **Deployment:** _(Add platform used, e.g., Vercel / Netlify / Firebase Hosting)_
+
+---
+
+## ⚙️ Installation
+
+Follow these steps to set up the project locally:
+
+1. **Clone the repository**
+
+   ```bash
+   git clone
+
+   ```
+
+2. **Install Dependencies**
+
+   ```
+   npm install
+
+   ```
+
+3. **Add Environment Variables**
+
+   ```
+   VITE_SUPABASE_URL=your_supabase_url
+   VITE_SUPABASE_KEY=your_supabase_key
+   VITE_GOOGLE_MAPS_API_KEY=your_google_maps_api_key
+
+   ```
+
+4. **Run Development Servor**
+
+   ```npm run dev
+
+   ```
