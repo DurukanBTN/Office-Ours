@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import './MainPage.css'
 import ProfilePage from './ProfilePage'
 import { mockStudySessions } from './mockData'
+import MapComponent from './Maps/Maps'
 
 function MainPage({ onLogout }) {
   const [showProfile, setShowProfile] = useState(false)
@@ -61,9 +62,12 @@ function MainPage({ onLogout }) {
       </button>
       
       <div className="map-container">
-        <div className="map-placeholder">
+        {/* <div className="map-placeholder">
           <p>Google Maps API</p>
-        </div>
+        </div> */}
+        <MapComponent>
+            
+        </MapComponent>
       </div>
       
       <div className="study-sessions-container">
