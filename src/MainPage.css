@@ -213,6 +213,19 @@
   background-color: #535bf2;
 }
 
+.loading-message, .no-sessions-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: #ccc;
+  font-size: 1.1rem;
+}
+
+.loading-message p, .no-sessions-message p {
+  margin: 0;
+}
+
 .study-sessions-list {
   flex: 1;
   overflow-y: auto;

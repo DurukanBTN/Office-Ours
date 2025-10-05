@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './MainPage.css'
 import ProfilePage from './ProfilePage'
 import { mockStudySessions } from './mockData'
@@ -9,17 +9,40 @@ function MainPage({ onLogout }) {
   const [showProfile, setShowProfile] = useState(false)
   const [showFilterModal, setShowFilterModal] = useState(false)
   const [selectedClasses, setSelectedClasses] = useState([])
-  const [filteredSessions, setFilteredSessions] = useState(mockStudySessions)
+  const [studySessions, setStudySessions] = useState([])
+  const [filteredSessions, setFilteredSessions] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  // Fetch sessions from Supabase on component mount
+  useEffect(() => {
+    const fetchSessions = async () => {
+      try {
+        setLoading(true)
+        const sessions = await allSessions()
+        setStudySessions(sessions)
+        setFilteredSessions(sessions)
+      } catch (error) {
+        console.error('Error fetching sessions:', error)
+        // Fallback to mock data if Supabase fails
+        setStudySessions(mockStudySessions)
+        setFilteredSessions(mockStudySessions)
+      } finally {
+        setLoading(false)
+      }
+    }
+    
+    fetchSessions()
+  }, [])
 
   // Get unique classes from all sessions
-  const uniqueClasses = [...new Set(mockStudySessions.map(session => session.class))]
+  const uniqueClasses = [...new Set(studySessions.map(session => session.class))]
 
   // Filter sessions based on selected classes
   const applyFilters = () => {
     if (selectedClasses.length === 0) {
-      setFilteredSessions(mockStudySessions)
+      setFilteredSessions(studySessions)
     } else {
-      const filtered = mockStudySessions.filter(session => 
+      const filtered = studySessions.filter(session => 
         selectedClasses.includes(session.class)
       )
       setFilteredSessions(filtered)
@@ -30,7 +53,7 @@ function MainPage({ onLogout }) {
   // Reset all filters
   const resetFilters = () => {
     setSelectedClasses([])
-    setFilteredSessions(mockStudySessions)
+    setFilteredSessions(studySessions)
   }
 
   // Handle class checkbox change
@@ -91,17 +114,24 @@ function MainPage({ onLogout }) {
           </div>
         </div>
         <div className="study-sessions-list">
-          {filteredSessions.map((session) => (
-            <button 
-            // TODO !!!!!!: instead of mockStudySessions we should map the sessions data we get
-            //              from supabase
-              key={session.id} 
-              className="study-session-item"
-              onClick={() => {
-                // TODO: Show study session on map
-                console.log('Study session clicked:', session)
-              }}
-            >
+          {loading ? (
+            <div className="loading-message">
+              <p>Loading study sessions...</p>
+            </div>
+          ) : filteredSessions.length === 0 ? (
+            <div className="no-sessions-message">
+              <p>No study sessions found.</p>
+            </div>
+          ) : (
+            filteredSessions.map((session) => (
+              <button 
+                key={session.id} 
+                className="study-session-item"
+                onClick={() => {
+                  // TODO: Show study session on map
+                  console.log('Study session clicked:', session)
+                }}
+              >
               <div className="session-header">
                 <span className="session-class">{session.class}</span>
               </div>
@@ -127,7 +157,8 @@ function MainPage({ onLogout }) {
                 </div>
               </div>
             </button>
-          ))}
+            ))
+          )}
         </div>
       </div>
 
