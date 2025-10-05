@@ -13,6 +13,31 @@ async function createSession(location, start_time, end_time, study_class, descri
     const { data: { user } } = await client.auth.getUser();
     if (!user) throw new Error ("User not found!");
 
+    // Check if profile exists, if not create a default one
+    const { data: existingProfile, error: profileError } = await client
+        .from("profiles")
+        .select("id")
+        .eq("id", user.id)
+        .single();
+
+    if (profileError && profileError.code === 'PGRST116') {
+        // Profile doesn't exist, create a default one
+        const { error: createError } = await client
+            .from("profiles")
+            .insert([{
+                id: user.id,
+                year: 1,
+                major: "Undeclared",
+                classes: [],
+                first_name: "User",
+                last_name: "Name"
+            }]);
+        
+        if (createError) throw createError;
+    } else if (profileError) {
+        throw profileError;
+    }
+
     const { data, error } = await client
         .from("sessions")
         .insert([{

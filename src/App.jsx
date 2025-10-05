@@ -168,6 +168,9 @@ function App() {
                       setNewPassword('')
                       setConfirmPassword('')
                       
+                      // Show email authentication message
+                      alert('Account created successfully! Please check your email and click the verification link to authenticate your account before logging in.')
+                      
                       // Redirect to main page
                       setIsLoggedIn(true)
                     } catch (error) {

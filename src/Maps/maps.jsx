@@ -134,7 +134,7 @@ const mapStyles = [
         ]
     }
 ];
-function MapComponent() {
+function MapComponent({ onLocationSelect, selectedLocation, allowLocationSelection = false }) {
 
     const [selectedSession, setSelectedSession] = useState(null);
 
@@ -154,6 +154,11 @@ function MapComponent() {
                         minZoom={13}
                         maxZoom={18}
                         mapID = "StormHacks2025"
+                        onClick={allowLocationSelection ? (event) => {
+                            const lat = event.detail.latLng.lat;
+                            const lng = event.detail.latLng.lng;
+                            onLocationSelect({ lat, lng });
+                        } : undefined}
                     >
                         {sessions.map(marker => (
                             <Marker
@@ -165,14 +170,30 @@ function MapComponent() {
                             />
                         ))}
 
+                        {/* Selected location marker for AddPage */}
+                        {allowLocationSelection && selectedLocation && (
+                            <Marker
+                                position={selectedLocation}
+                                title="Selected Location"
+                            />
+                        )}
+
                         {selectedSession?.position && (
                             <InfoWindow
                                 position={selectedSession.position}
                                 onCloseClick={() => setSelectedSession(null)}
                             >
                                 <div style={{ padding: '10px' }}>
-                                    <h3>{selectedSession.title}</h3>
-                                    <p>{selectedSession.comment}</p>
+                                    <h3 style={{ color: '#000' }}>{selectedSession.title}</h3>
+                                    <p style={{ color: '#000' }}>{selectedSession.comment}</p>
+                                    <p style={{ 
+                                        fontSize: '12px', 
+                                        color: '#000', 
+                                        marginTop: '8px',
+                                        fontFamily: 'monospace'
+                                    }}>
+                                        Coordinates: {selectedSession.position.lat.toFixed(6)}, {selectedSession.position.lng.toFixed(6)}
+                                    </p>
                                 </div>
                             </InfoWindow>
                           )}
