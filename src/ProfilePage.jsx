@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import './ProfilePage.css'
 import { mockStudySessions } from './mockData'
 import { updateProfile } from './supabase/profile'
-import { getUserSessions } from './supabase/session'
+import { getUserSessions, deleteSession } from './supabase/session'
 import client from './supabase/client'
 
 function ProfilePage({ onBack }) {
@@ -209,6 +209,32 @@ function ProfilePage({ onBack }) {
       major: '',
       year: ''
     })
+  }
+
+  // Handle deleting a session
+  const handleDeleteSession = async (sessionId) => {
+    // Show confirmation dialog
+    const confirmed = window.confirm('Are you sure you want to delete this study session? This action cannot be undone.')
+    
+    if (!confirmed) return
+    
+    setLoading(true)
+    setError(null)
+    
+    try {
+      // Delete session from database
+      await deleteSession(sessionId)
+      
+      // Refresh sessions list
+      await fetchUserSessions()
+      
+      setLoading(false)
+      console.log('Session deleted successfully')
+    } catch (error) {
+      console.error('Error deleting session:', error)
+      setError('Failed to delete session. Please try again.')
+      setLoading(false)
+    }
   }
 
   // Check if profile is complete (has all required fields and at least one class)
@@ -447,6 +473,16 @@ function ProfilePage({ onBack }) {
                       <div className="session-normal-view">
                         <div className="session-header">
                           <span className="session-class">{session.class}</span>
+                          <button 
+                            className="delete-session-btn"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              handleDeleteSession(session.id)
+                            }}
+                            disabled={loading}
+                          >
+                            ×
+                          </button>
                         </div>
                         <div className="session-details">
                           <div className="session-info">
@@ -473,6 +509,16 @@ function ProfilePage({ onBack }) {
                       <div className="session-hover-view">
                         <div className="session-header">
                           <span className="session-class">{session.class}</span>
+                          <button 
+                            className="delete-session-btn"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              handleDeleteSession(session.id)
+                            }}
+                            disabled={loading}
+                          >
+                            ×
+                          </button>
                         </div>
                         <div className="session-description">
                           <span className="description-label">Description:</span>

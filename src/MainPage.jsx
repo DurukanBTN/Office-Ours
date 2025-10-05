@@ -72,7 +72,10 @@ function MainPage({ onLogout }) {
 
   // Show profile page if profile is open
   if (showProfile) {
-    return <ProfilePage onBack={() => setShowProfile(false)} />
+    return <ProfilePage onBack={() => {
+      setShowProfile(false)
+      fetchSessions() // Refresh sessions when returning from ProfilePage
+    }} />
   }
 
   // Show add page if add page is open
