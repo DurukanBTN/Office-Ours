@@ -87,8 +87,9 @@
 
 .classes-list {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: row;
   gap: 0.8rem;
+  overflow-x: auto;
 }
 
 .class-item {
@@ -99,6 +100,8 @@
   font-weight: 500;
   font-size: 0.9rem;
 }
+
+
 
 .study-sessions {
   display: grid;
@@ -113,11 +116,20 @@
   padding: 1.5rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
 }
 
 .study-session-box:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  background-color: #555;
+}
+
+.study-session-box:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .session-header {

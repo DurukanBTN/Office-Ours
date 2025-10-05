@@ -1,40 +1,24 @@
 import React from 'react'
 import './ProfilePage.css'
+import { mockStudySessions } from './mockData'
 
 function ProfilePage({ onBack }) {
   // TODO: Replace with data from Supabase
   const mockProfile = {
-    firstName: "MockName",
-    lastName: "MockSurname",
+    pid: 1, // pid?
+    year: 3,
+    major: "Computer Science",
     classes: ["CPSC 210", "MATH 200", "PHYS 101", "ENGL 112"],
-    major: "Mock Major",
-    year: "Mock year"
+    first_name: "MockName",
+    last_name: "MockSurname",
   }
 
-  // TODO: Replace with data from Supabase
-  const mockStudySessions = [
-    {
-      id: 1,
-      class: "CPSC 210",
-      date: "2024-01-15",
-      time: "2:00 PM - 4:00 PM",
-      location: "Library Room 201"
-    },
-    {
-      id: 2,
-      class: "MATH 200",
-      date: "2024-01-16",
-      time: "6:00 PM - 8:00 PM",
-      location: "Math Building Room 501"
-    },
-    {
-      id: 3,
-      class: "PHYS 101",
-      date: "2024-01-18",
-      time: "1:00 PM - 3:00 PM",
-      location: "Physics Building Room 105"
-    }
-  ]
+  // Filter study sessions to only show current user's sessions
+  
+  // TODO !!!!!!: instead of mockStudySessions we should map the sessions data we get
+  //              from supabase
+  const currentUserSessions = mockStudySessions.filter(session => session.pid === mockProfile.pid)
+
 
   return (
     <div className="profile-page">
@@ -55,7 +39,7 @@ function ProfilePage({ onBack }) {
             <h2>Personal Information</h2>
             <div className="info-item">
               <span className="label">Name:</span>
-              <span className="value">{mockProfile.firstName} {mockProfile.lastName}</span>
+              <span className="value">{mockProfile.first_name} {mockProfile.last_name}</span>
             </div>
             <div className="info-item">
               <span className="label">Major:</span>
@@ -81,26 +65,40 @@ function ProfilePage({ onBack }) {
           <div className="info-section">
             <h2>Study Sessions</h2>
             <div className="study-sessions">
-              {mockStudySessions.map((session) => (
-                <div key={session.id} className="study-session-box">
+              {currentUserSessions.map((session) => (
+                <button 
+                  key={session.id} 
+                  className="study-session-box"
+                  onClick={() => {
+                    // TODO: Show study session on map
+                    console.log('Study session clicked:', session)
+                  }}
+                >
                   <div className="session-header">
                     <span className="session-class">{session.class}</span>
                   </div>
                   <div className="session-details">
                     <div className="session-info">
                       <span className="detail-label">Date:</span>
-                      <span className="detail-value">{session.date}</span>
+                      <span className="detail-value">{new Date(session.start_time).toLocaleDateString()}</span>
                     </div>
                     <div className="session-info">
                       <span className="detail-label">Time:</span>
-                      <span className="detail-value">{session.time}</span>
+                      <span className="detail-value">
+                        {new Date(session.start_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} - 
+                        {new Date(session.end_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                      </span>
                     </div>
                     <div className="session-info">
                       <span className="detail-label">Location:</span>
                       <span className="detail-value">{session.location}</span>
                     </div>
+                    <div className="session-info">
+                      <span className="detail-label">Description:</span>
+                      <span className="detail-value">{session.description}</span>
+                    </div>
                   </div>
-                </div>
+                </button>
               ))}
             </div>
           </div>
