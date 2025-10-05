@@ -9,9 +9,16 @@ function AddPage({ onBack }) {
   const [endTime, setEndTime] = useState('')
   const [studyClass, setStudyClass] = useState('')
   const [description, setDescription] = useState('')
+  const [selectedLocation, setSelectedLocation] = useState(null)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    
+    // Check if location is selected on map
+    if (!selectedLocation) {
+      alert('Please select a location on the map before creating a session.')
+      return
+    }
     
     try {
       // Convert datetime-local inputs to ISO strings for Supabase
@@ -28,6 +35,7 @@ function AddPage({ onBack }) {
       )
       
       console.log('Session created successfully:', newSession)
+      console.log('Selected location coordinates:', selectedLocation)
       
       // Clear form fields
       setLocation('')
@@ -35,6 +43,7 @@ function AddPage({ onBack }) {
       setEndTime('')
       setStudyClass('')
       setDescription('')
+      setSelectedLocation(null)
       
       // Show success message
       alert('Study session created successfully!')
@@ -58,7 +67,11 @@ function AddPage({ onBack }) {
       </button>
       
       <div className="map-container">
-        <MapComponent />
+        <MapComponent 
+          onLocationSelect={setSelectedLocation}
+          selectedLocation={selectedLocation}
+          allowLocationSelection={true}
+        />
       </div>
       
       <div className="form-container">
@@ -77,6 +90,17 @@ function AddPage({ onBack }) {
                 placeholder="e.g., Library Room 201"
                 required
               />
+              <div className="location-status">
+                {selectedLocation ? (
+                  <span style={{ color: '#4CAF50', fontSize: '12px' }}>
+                    ✓ Location selected on map
+                  </span>
+                ) : (
+                  <span style={{ color: '#f44336', fontSize: '12px' }}>
+                    ⚠ Please select a location on the map
+                  </span>
+                )}
+              </div>
             </div>
 
             <div className="form-group">
