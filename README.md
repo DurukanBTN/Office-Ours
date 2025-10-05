@@ -47,12 +47,11 @@ Follow these steps to set up the project locally:
 
    ```bash
    git clone
-
    ```
 
 2. **Install Dependencies**
 
-   ```
+   ```bash
    npm install
 
 3. **Add Environment Variables**
@@ -62,9 +61,8 @@ Follow these steps to set up the project locally:
    VITE_SUPABASE_KEY=your_supabase_key
    VITE_GOOGLE_MAPS_API_KEY=your_google_maps_api_key
 
-
 4. **Run Development Serverr**
 
-   ```
+   ```bash
    npm run dev
 
