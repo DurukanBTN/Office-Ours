@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import ubcLogo from './assets/ubc.png'
-import viteLogo from '/vite.svg'
 import MainPage from './MainPage'
 import './App.css'
 import MapComponent from './Maps/Maps'
+import { signUp, signIn } from './supabase/auth'
 
 
 function App() {
@@ -46,16 +46,22 @@ function App() {
           />
           <button 
             className="login-button"
-            onClick={() => {
-              // TODO: Validate email and password with Supabase
-              // TODO: Add error handling
-              // TODO: Add loading state during login
-              // TODO: Redirect to main page on successful login
-              
-              // TODO: when proper authentication is implemented this should only redirect if credentials are valid 
-              setIsLoggedIn(true)
-              
-              console.log('Login attempt:', { email, password })
+            onClick={async () => {
+              try {
+                // Sign in with Supabase
+                const userId = await signIn(password, email)
+                console.log('Login successful:', userId)
+                
+                // Clear form fields
+                setEmail('')
+                setPassword('')
+                
+                // Redirect to main page
+                setIsLoggedIn(true)
+              } catch (error) {
+                console.error('Login failed:', error)
+                alert('Invalid email or password. Please try again.')
+              }
             }}
           >
             Login
@@ -113,21 +119,30 @@ function App() {
                 </button>
                 <button 
                   className="create-button"
-                  onClick={() => {
-                    // TODO: Send user data to Supabase here
-                    // TODO: Add validation (password match etc.)
-                    // TODO: Add error handling for Supabase responses
-                    // TODO: Add loading state during account creation
-                    // TODO: Redirect to main page on login
-                    console.log('Creating account:', { newEmail, newPassword })
-                    setShowCreateAccount(false)
-                    setNewEmail('')
-                    setNewPassword('')
-                    setConfirmPassword('')
-
-                    // TODO: Remove this redirect when proper authentication is implemented
-                    // This should only redirect if credentials are valid
-                    setIsLoggedIn(true)
+                  onClick={async () => {
+                    // Validate password match
+                    if (newPassword !== confirmPassword) {
+                      alert('Passwords do not match. Please try again.')
+                      return
+                    }
+                    
+                    try {
+                      // Create account with Supabase
+                      const userId = await signUp(newPassword, newEmail)
+                      console.log('Account created successfully:', userId)
+                      
+                      // Clear form and close modal
+                      setShowCreateAccount(false)
+                      setNewEmail('')
+                      setNewPassword('')
+                      setConfirmPassword('')
+                      
+                      // Redirect to main page
+                      setIsLoggedIn(true)
+                    } catch (error) {
+                      console.error('Error creating account:', error)
+                      alert('Failed to create account. Please try again.')
+                    }
                   }}
                 >
                   Create Account
