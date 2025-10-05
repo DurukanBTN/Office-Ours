@@ -1,8 +1,8 @@
 # StormHacks 2025 Submission
 
-Durukan Butun
-Iden Huang
-Pouya Khoshnavazi
+Durukan Butun,
+Iden Huang,
+Pouya Khoshnavazi,
 
 # 🏫 Office Ours
 
