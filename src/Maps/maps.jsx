@@ -1,4 +1,5 @@
-import { APIProvider, Map } from '@vis.gl/react-google-maps'
+import { APIProvider, Map, InfoWindow, Marker } from '@vis.gl/react-google-maps'
+import { useState } from 'react';
 import "./Maps.css"
 
 const googleapikey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
@@ -12,7 +13,14 @@ const ubcBounds = {
     west: -123.263   
 };
 
-const sessions = []
+const sessions = [
+    {
+        id: 1,
+        position: {lat: 49.2613, lng:-123.2489},
+        title: "CPSC 110",
+        comment: "Review for midterm"
+    }
+]
 
 const mapStyles = [
     {
@@ -128,6 +136,8 @@ const mapStyles = [
 ];
 function MapComponent() {
 
+    const [selectedSession, setSelectedSession] = useState(null);
+
     return (
         <>
             <APIProvider apiKey={googleapikey}>
@@ -143,7 +153,30 @@ function MapComponent() {
                         }}
                         minZoom={13}
                         maxZoom={18}
-                    />
+                        mapID = "StormHacks2025"
+                    >
+                        {sessions.map(marker => (
+                            <Marker
+                                key={marker.id}
+                                position={marker.position}
+                                title={marker.title}
+                                onClick={() => setSelectedSession(marker)}
+                                // icon={"src\assets\react.svg"}
+                            />
+                        ))}
+
+                        {selectedSession?.position && (
+                            <InfoWindow
+                                position={selectedSession.position}
+                                onCloseClick={() => setSelectedSession(null)}
+                            >
+                                <div style={{ padding: '10px' }}>
+                                    <h3>{selectedSession.title}</h3>
+                                    <p>{selectedSession.comment}</p>
+                                </div>
+                            </InfoWindow>
+                          )}
+                    </Map>
                 </div>
             </APIProvider>
         </>
