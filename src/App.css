@@ -22,7 +22,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700;800;900&display=swap');
 
 .login-title {
-  font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  font-family: Luminari, fantasy, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
   font-weight: 800;
   font-size: 3.2rem;
   line-height: 1.1;
@@ -32,11 +32,7 @@
     -1px -1px 0 #052742,
      1px -1px 0 #052742,
     -1px  1px 0 #052742,
-     1px  1px 0 #052742,
-    -2px -2px 0 #ECDEC0,
-     2px -2px 0 #ECDEC0,
-    -2px  2px 0 #ECDEC0,
-     2px  2px 0 #ECDEC0;
+     1px  1px 0 #052742;
   margin-top: -0.5rem;
 }
 
