@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import ubcLogo from './assets/ubc.png'
+import ubcLogo from './assets/logo3.png'
 import MainPage from './MainPage'
 import './App.css'
 import MapComponent from './Maps/Maps'
@@ -48,11 +48,9 @@ function App() {
   return (
     <>
       <div>
-        <a href="https://ubc.ca" target="_blank">
-          <img src={ubcLogo} className="logo react" alt="UBC logo" />
-        </a>
+        <img src={ubcLogo} className="logo" alt="Office Ours logo" />
       </div>
-      <h1>UBC Study Buddies</h1>
+      <h1 className="login-title">Office Ours</h1>
       <div className="card">
         <div className="login-form">
           <input
