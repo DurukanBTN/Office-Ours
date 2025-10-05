@@ -1,35 +1,191 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import ubcLogo from './assets/logo3.png'
+import MainPage from './MainPage'
 import './App.css'
+import MapComponent from './Maps/Maps'
+import { signUp, signIn } from './supabase/auth'
+import client from './supabase/client'
+import { createProfile } from './supabase/profile'
+
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [showCreateAccount, setShowCreateAccount] = useState(false)
+  const [newEmail, setNewEmail] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  // Check if user has a profile and create one if they don't
+  const ensureUserProfile = async (userID) => {
+    try {
+      // Check if profile exists
+      const { data, error } = await client
+        .from("profiles")
+        .select("*")
+        .eq("id", userID)
+        
+
+      if (error) {
+        // Profile doesn't exist, create one with empty values
+        console.log('No profile found, creating new profile for user')
+        await createProfile(null, null, [], null, null)
+        console.log('Profile created successfully')
+      } else {
+        console.log('Profile already exists for user')
+      }
+    } catch (err) {
+      console.error('Error ensuring user profile:', err)
+    }
+  }
+
+  // Show main page if logged in, otherwise show login form
+  if (isLoggedIn) {
+    return <MainPage onLogout={() => setIsLoggedIn(false)} />
+  }
 
   return (
     <>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <img src={ubcLogo} className="logo" alt="Office Ours logo" />
       </div>
-      <h1>Vite + React</h1>
+      <h1 className="login-title">Office Ours</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+        <div className="login-form">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="input-field"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="input-field"
+          />
+          <button 
+            className="login-button"
+            onClick={async () => {
+              try {
+                // Sign in with Supabase
+                const userId = await signIn(password, email)
+                console.log('Login successful:', userId)
+                
+                // Ensure user has a profile
+                await ensureUserProfile(userId)
+                
+                // Clear form fields
+                setEmail('')
+                setPassword('')
+                
+                // Redirect to main page
+                setIsLoggedIn(true)
+              } catch (error) {
+                console.error('Login failed:', error)
+                alert('Invalid email or password. Please try again.')
+              }
+            }}
+          >
+            Login
+          </button>
+          <button 
+            className="create-account-button"
+            onClick={() => setShowCreateAccount(true)}
+          >
+            Create Account
+          </button>
+        </div>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+
+      {/* Create Account Modal */}
+      {showCreateAccount && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <div className="modal-header">
+              <h2>Create Account</h2>
+              <button 
+                className="close-button"
+                onClick={() => setShowCreateAccount(false)}
+              >
+                ×
+              </button>
+            </div>
+            <div className="modal-content">
+              <input
+                type="email"
+                placeholder="Email"
+                value={newEmail}
+                onChange={(e) => setNewEmail(e.target.value)}
+                className="input-field"
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="input-field"
+              />
+              <input
+                type="password"
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="input-field"
+              />
+              <div className="modal-buttons">
+                <button 
+                  className="cancel-button"
+                  onClick={() => setShowCreateAccount(false)}
+                >
+                  Cancel
+                </button>
+                <button 
+                  className="create-button"
+                  onClick={async () => {
+                    // Validate password match
+                    if (newPassword !== confirmPassword) {
+                      alert('Passwords do not match. Please try again.')
+                      return
+                    }
+                    
+                    try {
+                      // Create account with Supabase
+                      const userId = await signUp(newPassword, newEmail)
+                      console.log('Account created successfully:', userId)
+                      
+                      // Ensure user has a profile (create one with empty values)
+                      await ensureUserProfile(userId)
+                      
+                      // Clear form and close modal
+                      setShowCreateAccount(false)
+                      setNewEmail('')
+                      setNewPassword('')
+                      setConfirmPassword('')
+                      
+                      // Show email authentication message
+                      alert('Account created successfully! Please check your email and click the verification link to authenticate your account before logging in.')
+                      
+                      // Redirect to main page
+                      setIsLoggedIn(true)
+                    } catch (error) {
+                      console.error('Error creating account:', error)
+                      alert('Failed to create account. Please try again.')
+                    }
+                  }}
+                >
+                  Create Account
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   )
 }
 
-export default App
+export default App;

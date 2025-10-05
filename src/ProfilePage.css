@@ -1,0 +1,572 @@
+.profile-page {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-color: #242424;
+  min-width: 320px;
+  min-height: 100vh;
+  position: relative;
+  overflow-y: auto;
+}
+
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: #646cff;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.25s;
+  z-index: 10;
+}
+
+.back-button:hover {
+  background-color: #535bf2;
+}
+
+.profile-content {
+  padding: 80px 2rem 2rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: white;
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.profile-header h1 {
+  font-size: 2.5rem;
+  margin: 0;
+  color: white;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.info-section {
+  background-color: #333;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.info-section h2 {
+  color: #646cff;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.info-item {
+  display: flex;
+  margin-bottom: 0.8rem;
+  align-items: center;
+}
+
+.info-item .label {
+  font-weight: 600;
+  color: #ccc;
+  min-width: 80px;
+  margin-right: 1rem;
+}
+
+.info-item .value {
+  color: white;
+  font-size: 1.1rem;
+}
+
+.placeholder {
+  color: #999;
+  font-style: italic;
+}
+
+.incomplete-profile-message {
+  text-align: center;
+  padding: 2rem;
+  background-color: #444;
+  border-radius: 8px;
+  border: 1px solid #555;
+}
+
+.incomplete-profile-message p {
+  margin: 0.5rem 0;
+  color: #ccc;
+}
+
+.incomplete-profile-message p:first-child {
+  font-size: 1.1rem;
+  color: #646cff;
+  font-weight: 500;
+}
+
+.edit-personal-section {
+  padding: 1rem;
+  background-color: #444;
+  border-radius: 8px;
+  border: 1px solid #555;
+}
+
+.edit-form {
+  margin-bottom: 1rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  color: #ccc;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.form-group input {
+  padding: 0.6rem;
+  border: 1px solid #666;
+  border-radius: 6px;
+  background-color: #555;
+  color: white;
+  font-size: 0.9rem;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #646cff;
+}
+
+.form-group input::placeholder {
+  color: #999;
+}
+
+.form-group input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.cancel-button {
+  background-color: #666;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.25s;
+}
+
+.cancel-button:hover:not(:disabled) {
+  background-color: #777;
+}
+
+.cancel-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.save-button {
+  background-color: #646cff;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.25s;
+}
+
+.save-button:hover:not(:disabled) {
+  background-color: #535bf2;
+}
+
+.save-button:disabled {
+  background-color: #666;
+  cursor: not-allowed;
+}
+
+.loading-message {
+  text-align: center;
+  padding: 2rem;
+  color: #ccc;
+}
+
+.loading-message p {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.classes-list {
+  display: flex;
+  flex-direction: row;
+  gap: 0.8rem;
+  overflow-x: auto;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.edit-button {
+  background-color: #646cff;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.25s;
+}
+
+.edit-button:hover {
+  background-color: #535bf2;
+}
+
+.add-class-section {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background-color: #444;
+  border-radius: 8px;
+  border: 1px solid #555;
+}
+
+.add-class-input {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.add-class-input input {
+  flex: 1;
+  padding: 0.6rem;
+  border: 1px solid #666;
+  border-radius: 6px;
+  background-color: #555;
+  color: white;
+  font-size: 0.9rem;
+}
+
+.add-class-input input:focus {
+  outline: none;
+  border-color: #646cff;
+}
+
+.add-class-input input::placeholder {
+  color: #999;
+}
+
+.add-class-button {
+  background-color: #646cff;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.25s;
+  white-space: nowrap;
+}
+
+.add-class-button:hover:not(:disabled) {
+  background-color: #535bf2;
+}
+
+.add-class-button:disabled {
+  background-color: #666;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #ff6b6b;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background-color: rgba(255, 107, 107, 0.1);
+  border-radius: 4px;
+  border: 1px solid rgba(255, 107, 107, 0.3);
+}
+
+.classes-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.class-item {
+  background-color: #646cff;
+  color: white;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.remove-class-button {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: bold;
+  transition: background-color 0.25s;
+  margin-left: 0.5rem;
+}
+
+.remove-class-button:hover:not(:disabled) {
+  background-color: rgba(255, 107, 107, 0.8);
+}
+
+.remove-class-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+
+.study-sessions {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.study-session-box {
+  background-color: #444;
+  border: 2px solid #646cff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+
+.study-session-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  background-color: #555;
+}
+
+.study-session-box:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.session-header {
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #555;
+  padding-bottom: 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.session-header h3 {
+  color: white;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.2rem;
+}
+
+.session-class {
+  background-color: #646cff;
+  color: white;
+  padding: 0.3rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.session-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.session-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.detail-label {
+  color: #ccc;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.detail-value {
+  color: white;
+  font-size: 0.9rem;
+}
+
+.loading-message, .no-sessions-message {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: #ccc;
+  font-size: 1.1rem;
+  text-align: center;
+  padding: 2rem;
+}
+
+.loading-message p, .no-sessions-message p {
+  margin: 0.5rem 0;
+}
+
+.no-sessions-message p:first-child {
+  font-weight: 500;
+  color: #888;
+}
+
+.no-sessions-message p:last-child {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Session content container for hover effect */
+.session-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Normal view (default) */
+.session-normal-view {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+/* Hover view (hidden by default) */
+.session-hover-view {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1rem;
+}
+
+/* Show hover view on hover */
+.study-session-box:hover .session-normal-view {
+  opacity: 0;
+}
+
+.study-session-box:hover .session-hover-view {
+  opacity: 1;
+}
+
+/* Description styling */
+.session-description {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.description-label {
+  color: #ccc;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.description-text {
+  color: #fff;
+  font-size: 1rem;
+  line-height: 1.5;
+  word-wrap: break-word;
+  white-space: normal;
+  text-align: left;
+  padding: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Delete session button */
+.delete-session-btn {
+  background-color: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+/* Show delete button on hover */
+.study-session-box:hover .delete-session-btn {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.delete-session-btn:hover {
+  background-color: #ff2222;
+  transform: scale(1.05);
+}
+
+.delete-session-btn:active {
+  transform: scale(0.95);
+}
+
+.delete-session-btn:disabled {
+  background-color: #666;
+  cursor: not-allowed;
+  transform: none;
+}
