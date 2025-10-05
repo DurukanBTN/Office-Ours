@@ -1,13 +1,10 @@
 import { useState } from 'react'
 import ubcLogo from './assets/ubc.png'
-// import viteLogo from '/vite.svg'
+import viteLogo from '/vite.svg'
 import MainPage from './MainPage'
 import './App.css'
-import client from "./supabase/client"
-import MapComponent from "./Maps/Maps"
-import * as auth from "./supabase/auth"
-import * as profile from "./supabase/profile"
-import * as session from "./supabase/session"
+import MapComponent from './Maps/Maps'
+
 
 function App() {
   const [email, setEmail] = useState('')
@@ -55,7 +52,6 @@ function App() {
               // TODO: Add loading state during login
               // TODO: Redirect to main page on successful login
               
-              // console.log(auth.signIn(password, email));
               // TODO: when proper authentication is implemented this should only redirect if credentials are valid 
               setIsLoggedIn(true)
               
@@ -123,8 +119,6 @@ function App() {
                     // TODO: Add error handling for Supabase responses
                     // TODO: Add loading state during account creation
                     // TODO: Redirect to main page on login
-
-            
                     console.log('Creating account:', { newEmail, newPassword })
                     setShowCreateAccount(false)
                     setNewEmail('')
