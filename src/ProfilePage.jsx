@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './ProfilePage.css'
 import { mockStudySessions } from './mockData'
-import { updateProfile } from './supabase/profile'
 
 function ProfilePage({ onBack }) {
   // TODO: Replace with data from Supabase
@@ -15,12 +14,20 @@ function ProfilePage({ onBack }) {
   }
 
   // State management
-  const [profile, setProfile] = useState(mockProfile)
+  const [profile, setProfile] = useState({
+    id: null,
+    year: null,
+    major: null,
+    classes: [],
+    first_name: null,
+    last_name: null,
+  })
   const [isEditing, setIsEditing] = useState(false)
   const [isEditingPersonal, setIsEditingPersonal] = useState(false)
   const [newClass, setNewClass] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [profileLoading, setProfileLoading] = useState(true)
   
   // Personal information editing state
   const [editForm, setEditForm] = useState({
@@ -30,61 +37,46 @@ function ProfilePage({ onBack }) {
     year: ''
   })
 
-  // Handle adding a new class
-  const handleAddClass = async () => {
+  // Load profile on component mount - using mock data for now
+  useEffect(() => {
+    setProfileLoading(false)
+  }, [])
+
+  // Handle adding a new class (UI only - no database interaction)
+  const handleAddClass = () => {
     if (!newClass.trim()) return
     
     setLoading(true)
     setError(null)
     
-    try {
-      // Add the new class to the existing classes
-      const updatedClasses = [...profile.classes, newClass.trim()]
-      
-      // Update profile using Supabase
-      const updatedProfile = await updateProfile(
-        null, // year
-        null, // major  
-        [newClass.trim()], // classes (only new classes)
-        null, // firstName
-        null  // lastName
-      )
-      
-      // Update local state
+    // Simulate loading
+    setTimeout(() => {
+      // Update local state only
       setProfile(prev => ({
         ...prev,
-        classes: updatedClasses
+        classes: [...prev.classes, newClass.trim()]
       }))
       
       setNewClass('')
-    } catch (err) {
-      setError('Failed to add class: ' + err.message)
-    } finally {
       setLoading(false)
-    }
+    }, 500)
   }
 
-  // Handle removing a class
-  const handleRemoveClass = async (classToRemove) => {
+  // Handle removing a class (UI only - no database interaction)
+  const handleRemoveClass = (classToRemove) => {
     setLoading(true)
     setError(null)
     
-    try {
-      // Remove the class from the list
-      const updatedClasses = profile.classes.filter(cls => cls !== classToRemove)
-      
-      // For now, we'll just update local state since updateProfile doesn't handle removal
-      // TODO: Implement class removal in Supabase or handle differently
+    // Simulate loading
+    setTimeout(() => {
+      // Update local state only
       setProfile(prev => ({
         ...prev,
-        classes: updatedClasses
+        classes: prev.classes.filter(cls => cls !== classToRemove)
       }))
       
-    } catch (err) {
-      setError('Failed to remove class: ' + err.message)
-    } finally {
       setLoading(false)
-    }
+    }, 300)
   }
 
   // Handle starting personal information edit
@@ -98,22 +90,14 @@ function ProfilePage({ onBack }) {
     setIsEditingPersonal(true)
   }
 
-  // Handle saving personal information
-  const handleSavePersonal = async () => {
+  // Handle saving personal information (UI only - no database interaction)
+  const handleSavePersonal = () => {
     setLoading(true)
     setError(null)
     
-    try {
-      // Update profile using Supabase
-      const updatedProfile = await updateProfile(
-        editForm.year ? parseInt(editForm.year) : null,
-        editForm.major || null,
-        null, // classes (not updating classes here)
-        editForm.firstName || null,
-        editForm.lastName || null
-      )
-      
-      // Update local state
+    // Simulate loading
+    setTimeout(() => {
+      // Update local state only
       setProfile(prev => ({
         ...prev,
         first_name: editForm.firstName,
@@ -123,11 +107,8 @@ function ProfilePage({ onBack }) {
       }))
       
       setIsEditingPersonal(false)
-    } catch (err) {
-      setError('Failed to update profile: ' + err.message)
-    } finally {
       setLoading(false)
-    }
+    }, 800)
   }
 
   // Handle canceling personal information edit
@@ -149,8 +130,31 @@ function ProfilePage({ onBack }) {
                            profile.classes.length > 0
 
   // Filter study sessions to only show current user's sessions
-  const currentUserSessions = mockStudySessions.filter(session => session.pid === profile.pid)
+  const currentUserSessions = mockStudySessions.filter(session => session.pid === profile.id)
 
+
+  // Show loading state while fetching profile
+  if (profileLoading) {
+    return (
+      <div className="profile-page">
+        <button 
+          className="back-button"
+          onClick={onBack}
+        >
+          ← Back to Main
+        </button>
+        
+        <div className="profile-content">
+          <div className="profile-header">
+            <h1>Profile</h1>
+          </div>
+          <div className="loading-message">
+            <p>Loading profile...</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="profile-page">

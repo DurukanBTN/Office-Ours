@@ -4,6 +4,8 @@ import MainPage from './MainPage'
 import './App.css'
 import MapComponent from './Maps/Maps'
 import { signUp, signIn } from './supabase/auth'
+import client from './supabase/client'
+import { createProfile } from './supabase/profile'
 
 
 function App() {
@@ -14,6 +16,29 @@ function App() {
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  // Check if user has a profile and create one if they don't
+  const ensureUserProfile = async (userID) => {
+    try {
+      // Check if profile exists
+      const { data, error } = await client
+        .from("profiles")
+        .select("*")
+        .eq("id", userID)
+        
+
+      if (error) {
+        // Profile doesn't exist, create one with empty values
+        console.log('No profile found, creating new profile for user')
+        await createProfile(null, null, [], null, null)
+        console.log('Profile created successfully')
+      } else {
+        console.log('Profile already exists for user')
+      }
+    } catch (err) {
+      console.error('Error ensuring user profile:', err)
+    }
+  }
 
   // Show main page if logged in, otherwise show login form
   if (isLoggedIn) {
@@ -51,6 +76,9 @@ function App() {
                 // Sign in with Supabase
                 const userId = await signIn(password, email)
                 console.log('Login successful:', userId)
+                
+                // Ensure user has a profile
+                await ensureUserProfile(userId)
                 
                 // Clear form fields
                 setEmail('')
@@ -130,6 +158,9 @@ function App() {
                       // Create account with Supabase
                       const userId = await signUp(newPassword, newEmail)
                       console.log('Account created successfully:', userId)
+                      
+                      // Ensure user has a profile (create one with empty values)
+                      await ensureUserProfile(userId)
                       
                       // Clear form and close modal
                       setShowCreateAccount(false)

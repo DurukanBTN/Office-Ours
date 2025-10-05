@@ -4,6 +4,7 @@ import ProfilePage from './ProfilePage'
 import { mockStudySessions } from './mockData'
 import MapComponent from './Maps/Maps'
 import * as profile from './supabase/profile'
+import { allSessions } from './supabase/session'
 
 function MainPage({ onLogout }) {
   const [showProfile, setShowProfile] = useState(false)

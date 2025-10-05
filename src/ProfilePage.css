@@ -210,6 +210,17 @@
   cursor: not-allowed;
 }
 
+.loading-message {
+  text-align: center;
+  padding: 2rem;
+  color: #ccc;
+}
+
+.loading-message p {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
 .classes-list {
   display: flex;
   flex-direction: row;
