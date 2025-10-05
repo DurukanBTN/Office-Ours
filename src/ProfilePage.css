@@ -85,11 +85,231 @@
   font-size: 1.1rem;
 }
 
+.placeholder {
+  color: #999;
+  font-style: italic;
+}
+
+.incomplete-profile-message {
+  text-align: center;
+  padding: 2rem;
+  background-color: #444;
+  border-radius: 8px;
+  border: 1px solid #555;
+}
+
+.incomplete-profile-message p {
+  margin: 0.5rem 0;
+  color: #ccc;
+}
+
+.incomplete-profile-message p:first-child {
+  font-size: 1.1rem;
+  color: #646cff;
+  font-weight: 500;
+}
+
+.edit-personal-section {
+  padding: 1rem;
+  background-color: #444;
+  border-radius: 8px;
+  border: 1px solid #555;
+}
+
+.edit-form {
+  margin-bottom: 1rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  color: #ccc;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.form-group input {
+  padding: 0.6rem;
+  border: 1px solid #666;
+  border-radius: 6px;
+  background-color: #555;
+  color: white;
+  font-size: 0.9rem;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #646cff;
+}
+
+.form-group input::placeholder {
+  color: #999;
+}
+
+.form-group input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.cancel-button {
+  background-color: #666;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.25s;
+}
+
+.cancel-button:hover:not(:disabled) {
+  background-color: #777;
+}
+
+.cancel-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.save-button {
+  background-color: #646cff;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.25s;
+}
+
+.save-button:hover:not(:disabled) {
+  background-color: #535bf2;
+}
+
+.save-button:disabled {
+  background-color: #666;
+  cursor: not-allowed;
+}
+
 .classes-list {
   display: flex;
   flex-direction: row;
   gap: 0.8rem;
   overflow-x: auto;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.edit-button {
+  background-color: #646cff;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.25s;
+}
+
+.edit-button:hover {
+  background-color: #535bf2;
+}
+
+.add-class-section {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background-color: #444;
+  border-radius: 8px;
+  border: 1px solid #555;
+}
+
+.add-class-input {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.add-class-input input {
+  flex: 1;
+  padding: 0.6rem;
+  border: 1px solid #666;
+  border-radius: 6px;
+  background-color: #555;
+  color: white;
+  font-size: 0.9rem;
+}
+
+.add-class-input input:focus {
+  outline: none;
+  border-color: #646cff;
+}
+
+.add-class-input input::placeholder {
+  color: #999;
+}
+
+.add-class-button {
+  background-color: #646cff;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.25s;
+  white-space: nowrap;
+}
+
+.add-class-button:hover:not(:disabled) {
+  background-color: #535bf2;
+}
+
+.add-class-button:disabled {
+  background-color: #666;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #ff6b6b;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background-color: rgba(255, 107, 107, 0.1);
+  border-radius: 4px;
+  border: 1px solid rgba(255, 107, 107, 0.3);
+}
+
+.classes-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.8rem;
 }
 
 .class-item {
@@ -99,6 +319,36 @@
   border-radius: 8px;
   font-weight: 500;
   font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.remove-class-button {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: bold;
+  transition: background-color 0.25s;
+  margin-left: 0.5rem;
+}
+
+.remove-class-button:hover:not(:disabled) {
+  background-color: rgba(255, 107, 107, 0.8);
+}
+
+.remove-class-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 

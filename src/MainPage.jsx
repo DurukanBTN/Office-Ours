@@ -3,7 +3,7 @@ import './MainPage.css'
 import ProfilePage from './ProfilePage'
 import { mockStudySessions } from './mockData'
 import MapComponent from './Maps/Maps'
-import * as session from "./supabase/session"
+import * as profile from './supabase/profile'
 
 function MainPage({ onLogout }) {
   const [showProfile, setShowProfile] = useState(false)
